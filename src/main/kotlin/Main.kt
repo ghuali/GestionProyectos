@@ -15,10 +15,10 @@ import androidx.compose.ui.window.application
 fun App() {
 
     MaterialTheme {
-        /*welcomeView()*/
-        /*loginView()*/
-        /*proyectoView()*/
-        tareaView()
+//        welcomeView()
+//        loginView()
+        proyectoView()
+//        tareaView()
 }
 }
 

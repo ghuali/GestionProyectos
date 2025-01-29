@@ -58,7 +58,7 @@ fun proyectoView() {
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            Text(text = "Mostrar los datos (campos) del proyecto", fontSize = 20.sp, modifier = Modifier.padding(vertical = 8.dp))
+            Text(text = "Datos (campos) del proyecto", fontSize = 20.sp, modifier = Modifier.padding(vertical = 8.dp))
 
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 Text("Tareas del Proyecto", fontSize = 18.sp, fontWeight = FontWeight.Bold)
