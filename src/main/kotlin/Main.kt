@@ -9,17 +9,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import cafe.adriel.voyager.navigator.Navigator
 
 @Composable
 @Preview
 fun App() {
 
     MaterialTheme {
-//        welcomeView()
-//        loginView()
-        proyectoView()
-//        tareaView()
-}
+        Navigator(LoginScreen())
+    }
 }
 
 fun main() = application {

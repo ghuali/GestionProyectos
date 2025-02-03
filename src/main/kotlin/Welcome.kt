@@ -13,73 +13,83 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Composable
-fun welcomeView() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-    ) {
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .background(Color(0xFF1976D2)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Nombre de Empresa",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
+class WelcomeScreen : Screen {
+    @Composable
+    override fun Content() {
 
+        val navigator = LocalNavigator.current
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+                .fillMaxSize()
+                .background(color = Color.White)
         ) {
-            Text(
-                text = "Bienvenido Usuario",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
 
-            Text(
-                text = "Rol: Gestor",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .background(Color(0xFF1976D2)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Nombre de Empresa",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
 
-            LazyColumn(modifier = Modifier.height(400.dp)) {
-                items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
-                    ProjectItem(project)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = "Bienvenido Usuario",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+
+                Text(
+                    text = "Rol: Gestor",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyColumn(modifier = Modifier.height(400.dp)) {
+                    items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
+                        ProjectItem(project)
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyColumn(modifier = Modifier.height(400.dp)) {
+                    items(listOf("Proyecto A", "Proyecto B", "Proyecto C")) { project ->
+                        ProjectItem(project)
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn(modifier = Modifier.height(400.dp)) {
-                items(listOf("Proyecto A", "Proyecto B", "Proyecto C")) { project ->
-                    ProjectItem(project)
-                }
+
+
+            Button(
+                onClick = { navigator?.pop() },
+                modifier = Modifier
+                    .padding(16.dp),
+                colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
+            ) {
+                Text("Desconectar", fontSize = 20.sp, color = Color.White)
             }
-        }
-
-
-        Button(
-            onClick = {  },
-            modifier = Modifier
-                .padding(16.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
-        ) {
-            Text("Desconectar", fontSize = 20.sp, color = Color.White)
         }
     }
 }
@@ -88,6 +98,8 @@ fun welcomeView() {
 
 @Composable
 fun ProjectItem(projectName: String) {
+    val navigator = LocalNavigator.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -97,7 +109,7 @@ fun ProjectItem(projectName: String) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(projectName, fontSize = 16.sp, fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = {  },
+            Button(onClick = { navigator?.push(ProyectosScreen()) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))) {
                 Text("Entrar al Proyecto",color = Color.White)
             }
