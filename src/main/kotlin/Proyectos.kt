@@ -137,7 +137,7 @@ class ProyectosScreen : Screen {
                     .padding(16.dp),
                 colors = ButtonDefaults.buttonColors(Color.Gray)
             ) {
-                Text("Volver", fontSize = 20.sp, color = Color.White)
+                Text("Volver", fontSize = 20.sp, color = Color.Red)
             }
         }
     }
