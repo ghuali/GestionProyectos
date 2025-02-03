@@ -95,7 +95,7 @@ class TareaScreen: Screen {
                 onClick = { navigator?.pop() },
                 modifier = Modifier
                     .padding(16.dp),
-                colors = ButtonDefaults.buttonColors(Color.Gray)
+                colors = ButtonDefaults.buttonColors(Color.Red)
             ) {
                 Text("Volver", fontSize = 20.sp, color = Color.White)
 
