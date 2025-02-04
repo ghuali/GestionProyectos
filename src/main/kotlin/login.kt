@@ -12,13 +12,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
-@Composable
-fun firstView() {
-    var currentView by remember { mutableStateOf("login") }
 
 
-
-}
 class LoginScreen : Screen {
     @Composable
     override fun Content() {
