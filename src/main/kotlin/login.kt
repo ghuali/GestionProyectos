@@ -20,7 +20,6 @@ class LoginScreen : Screen {
         val navigator = LocalNavigator.current
         var newUsername by remember { mutableStateOf("") }
         var newPassword by remember { mutableStateOf("") }
-        var isLoading by remember { mutableStateOf(false) }
         var errorMessage by remember { mutableStateOf<String?>(null) }
 
         Column(
@@ -70,10 +69,9 @@ class LoginScreen : Screen {
                     Button(
                         onClick = {
                             if (newUsername.isNotEmpty() && newPassword.isNotEmpty()) {
-                                isLoading = true
                                 errorMessage = null
                                 apiLogIn(newUsername, newPassword) { user ->
-                                    isLoading = false
+
                                     newUsername = ""
                                     newPassword = ""
                                     navigator?.push(WelcomeScreen())

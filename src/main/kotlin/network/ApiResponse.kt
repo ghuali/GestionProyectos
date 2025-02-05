@@ -1,6 +1,6 @@
 package network
-import LoginRequest
-import User
+import model.LoginRequest
+import model.User
 import network.NetworkUtils.httpClient
 import io.ktor.client.call.*
 import io.ktor.client.request.*
