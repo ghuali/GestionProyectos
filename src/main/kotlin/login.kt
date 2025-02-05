@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-
+import network.apiLogIn
 
 
 class LoginScreen : Screen {
@@ -20,6 +20,8 @@ class LoginScreen : Screen {
         val navigator = LocalNavigator.current
         var newUsername by remember { mutableStateOf("") }
         var newPassword by remember { mutableStateOf("") }
+        var isLoading by remember { mutableStateOf(false) }
+        var errorMessage by remember { mutableStateOf<String?>(null) }
 
         Column(
             modifier = Modifier
@@ -44,7 +46,6 @@ class LoginScreen : Screen {
 
             Column(
                 modifier = Modifier
-
                     .padding(16.dp)
                     .padding(vertical = 40.dp),
                 verticalArrangement = Arrangement.Top,
@@ -65,20 +66,37 @@ class LoginScreen : Screen {
                     modifier = Modifier.width(500.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = {
-                        newUsername = ""
-                        newPassword = ""
-                        navigator?.push(WelcomeScreen())
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
-                ) {
-                    Text("Iniciar sesion", color = Color.White)
+
+                    Button(
+                        onClick = {
+                            if (newUsername.isNotEmpty() && newPassword.isNotEmpty()) {
+                                isLoading = true
+                                errorMessage = null
+                                apiLogIn(newUsername, newPassword) { user ->
+                                    isLoading = false
+                                    newUsername = ""
+                                    newPassword = ""
+                                    navigator?.push(WelcomeScreen())
+                                }
+                            } else {
+                                errorMessage = "Por favor, introduce un usuario y una contraseña."
+                            }
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                    ) {
+                        Text("Iniciar sesion", color = Color.White)
+                    }
+                }
+
+                if (errorMessage != null) {
+                    Text(
+                        text = errorMessage!!,
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
                 }
             }
         }
     }
-}
-
