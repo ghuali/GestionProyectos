@@ -20,6 +20,8 @@ suspend fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)
             if (respuesta.status == HttpStatusCode.OK) {
                 val proyectos = respuesta.body<List<Historial>>()
                 onSuccessResponse(proyectos)
+            } else {
+                print("Error")
             }
         }
     }
