@@ -23,6 +23,8 @@ suspend fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)
             } else {
                 print("Error")
             }
+        } catch (e: Exception) {
+            print("Exception: ${e.message}")
         }
     }
 }
