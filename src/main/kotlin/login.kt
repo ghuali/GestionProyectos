@@ -72,9 +72,8 @@ class LoginScreen : Screen {
                                 errorMessage = null
                                 apiLogIn(newUsername, newPassword) { user ->
 
-                                    newUsername = ""
-                                    newPassword = ""
-                                    navigator?.push(WelcomeScreen())
+
+                                    navigator?.push(WelcomeScreen(user))
                                 }
                             } else {
                                 errorMessage = "Por favor, introduce un usuario y una contraseña."

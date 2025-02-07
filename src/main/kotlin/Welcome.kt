@@ -18,14 +18,16 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.launch
 import model.Historial
+import model.User
+
 import network.getHistorialProyectos
 
-class WelcomeScreen : Screen {
+class WelcomeScreen(val usuario: User) : Screen {
     @Composable
     override fun Content() {
         var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
 
-        // Cargar historial al iniciar la pantalla
+
         LaunchedEffect(Unit) {
             getHistorialProyectos { proyectos ->
                 historial = proyectos
@@ -60,8 +62,9 @@ class WelcomeScreen : Screen {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
+
                 Text(
-                    text = "Bienvenido Usuario",
+                    text = "Bienvenido ${usuario.nombre}",
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 16.dp)
