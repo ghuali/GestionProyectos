@@ -23,13 +23,12 @@ import network.getHistorialProyectos
 class WelcomeScreen : Screen {
     @Composable
     override fun Content() {
-        val scope = rememberCoroutineScope()
         var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
 
         // Cargar historial al iniciar la pantalla
         LaunchedEffect(Unit) {
-            scope.launch {
-                historial = getHistorialProyectos()
+            getHistorialProyectos { proyectos ->
+                historial = proyectos
             }
         }
 
@@ -101,7 +100,6 @@ class WelcomeScreen : Screen {
             }
         }
     }
-
 
     @Composable
     fun ProjectItem(nombre: String, descripcion: String = "") {
