@@ -61,45 +61,47 @@ class ProyectosScreen : Screen {
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { navigator?.push(ProyectoScreen()) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+            Box {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    Text("Entrar a Proyectos", color = Color.White)
-                }
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Button(
+                        onClick = { navigator?.push(ProyectoScreen()) },
+                        colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                    ) {
+                        Text("Entrar a Proyectos", color = Color.White)
+                    }
 
-                Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                if (activos.isEmpty()) {
-                    Text("No hay proyectos activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
-                } else {
-                    LazyColumn(modifier = Modifier.height(200.dp)) {
-                        items(activos) { proyecto ->
-                            ProjectItem(proyecto.nombre, proyecto.descripcion)
+                    Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    if (activos.isEmpty()) {
+                        Text("No hay proyectos activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                    } else {
+                        LazyColumn(modifier = Modifier.height(200.dp)) {
+                            items(activos) { proyecto ->
+                                ProjectItem(proyecto.nombre, proyecto.descripcion)
+                            }
                         }
                     }
-                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                Button(
-                    onClick = { navigator?.pop() },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
-                ) {
-                    Text("Desconectar", fontSize = 20.sp, color = Color.White)
+                    Button(
+                        onClick = { navigator?.pop() },
+                        modifier = Modifier
+                            .padding(16.dp),
+                        colors = ButtonDefaults.buttonColors(Color.Red)
+                    ) {
+                        Text("Volver", fontSize = 20.sp, color = Color.White)
+                    }
                 }
             }
         }
