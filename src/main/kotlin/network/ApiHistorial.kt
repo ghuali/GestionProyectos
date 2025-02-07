@@ -11,7 +11,7 @@ import model.Historial
 import network.NetworkUtils.httpClient
 
 
-suspend fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)  {
+fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)  {
     val url = "http://127.0.0.1:5000/proyecto/historialProyectos" // Cambia la URL según tu API
     CoroutineScope(Dispatchers.IO).launch {
         try {
