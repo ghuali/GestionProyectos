@@ -26,7 +26,7 @@ class WelcomeScreen(val usuario: User) : Screen {
     @Composable
     override fun Content() {
         var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
-
+        val navigator = LocalNavigator.current
 
         LaunchedEffect(Unit) {
             getHistorialProyectos { proyectos ->
@@ -99,6 +99,14 @@ class WelcomeScreen(val usuario: User) : Screen {
                             ProjectItem(proyecto.nombre, proyecto.descripcion)
                         }
                     }
+                }
+                Button(
+                    onClick = { navigator?.pop() },
+                    modifier = Modifier
+                        .padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
+                ) {
+                    Text("Desconectar", fontSize = 20.sp, color = Color.White)
                 }
             }
         }
