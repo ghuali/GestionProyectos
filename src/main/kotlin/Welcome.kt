@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.launch
 import model.Activos
 import model.Historial
@@ -84,7 +85,9 @@ class WelcomeScreen(val usuario: User) : Screen {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Button(onClick = { navigator?.push(ProyectosScreen()) },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))) {
+                    Text("Entrar a Proyectos",color = Color.White)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 if (Activos.isEmpty()) {
@@ -121,9 +124,10 @@ class WelcomeScreen(val usuario: User) : Screen {
             }
         }
     }
+    }
+}
 
-    @Composable
-    fun ProjectItem(nombre: String, descripcion: String = "") {
+    private fun ProjectItem(nombre: String, descripcion: String = "") {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -137,7 +141,9 @@ class WelcomeScreen(val usuario: User) : Screen {
                 }
             }
         }
+
     }
-}
+
+
 
 
