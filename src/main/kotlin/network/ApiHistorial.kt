@@ -1,26 +1,22 @@
 package network
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import model.Historial
+import network.NetworkUtils.httpClient
 
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.HttpStatusCode
 
-suspend fun getHistorialProyectos(): List<Historial> {
-    val url = "http://127.0.0.1:5000/proyecto/historialProyectos"
-    return try {
-        val response: HttpResponse = NetworkUtils.httpClient.get(url)
-
-        if (response.status == HttpStatusCode.OK) {
-            response.body<List<Historial>>()  // ✅ Usa body() en lugar de get<T>()
-        } else {
-            println("Error: ${response.status}")
-            emptyList()
+suspend fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)  {
+    val url = "http://127.0.0.1:5000/proyecto/historialProyectos" // Cambia la URL según tu API
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val respuesta = httpClient.get(url)
+            val responseBody = respuesta.bodyAsText()
+            if (respuesta.status == HttpStatusCode.OK)
         }
-    } catch (e: Exception) {
-        println("Error fetching historial: ${e.message}")
-        emptyList()
     }
 }
