@@ -21,7 +21,7 @@ fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)  {
                 val proyectos = respuesta.body<List<Historial>>()
                 onSuccessResponse(proyectos)
             } else {
-                print("Error")
+                print("Error: ${respuesta.status}, Body: ${responseBody}")
             }
         } catch (e: Exception) {
             print("Exception: ${e.message}")
