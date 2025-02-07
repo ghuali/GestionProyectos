@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 
-class ProyectosScreen : Screen {
+class ProyectoScreen : Screen {
     @Composable
     override fun Content() {
         var expandedTareas by remember { mutableStateOf(false) }
