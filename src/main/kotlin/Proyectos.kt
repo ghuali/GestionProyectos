@@ -1,15 +1,16 @@
-import androidx.compose.runtime.Composable
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,8 +26,22 @@ import model.User
 import network.getHistorialProyectos
 import network.getProyectosActivos
 
-class ProyectosScreen : Screen {
+class ProyectosScreen() : Screen {
+    @Composable
     override fun Content() {
+        var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
+        var Activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
+        val navigator = LocalNavigator.current
+
+        LaunchedEffect(Unit) {
+            getHistorialProyectos { proyectos ->
+                historial = proyectos
+            }
+            getProyectosActivos { proyectos ->
+                Activos = proyectos
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,6 +70,8 @@ class ProyectosScreen : Screen {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
+
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { navigator?.push(ProyectoScreen()) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))) {
                     Text("Entrar a Proyectos",color = Color.White)
@@ -69,6 +86,17 @@ class ProyectosScreen : Screen {
                             }
                         }
                     }
+
+                    Button(
+                        onClick = { navigator?.pop() },
+                        modifier = Modifier
+                            .padding(16.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
+                    ) {
+                        Text("Desconectar", fontSize = 20.sp, color = Color.White)
+                    }
+                }
             }
+        }
     }
 }
