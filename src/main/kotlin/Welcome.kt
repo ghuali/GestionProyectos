@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -15,80 +16,86 @@ import androidx.compose.ui.unit.sp
 
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import kotlinx.coroutines.launch
+import model.Historial
+import network.getHistorialProyectos
 
-class WelcomeScreen : Screen {
-    @Composable
-    override fun Content() {
+@Composable
+fun WelcomeScreen() {
+    val scope = rememberCoroutineScope()
+    var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
 
-        val navigator = LocalNavigator.current
+    // Cargar historial al iniciar la pantalla
+    LaunchedEffect(Unit) {
+        scope.launch {
+            historial = getHistorialProyectos()
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
+        // Header
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(Color(0xFF1976D2)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Nombre de Empresa",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White)
+                .weight(1f)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
         ) {
+            Text(
+                text = "Bienvenido Usuario",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .background(Color(0xFF1976D2)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Nombre de Empresa",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-            }
+            Text(
+                text = "Rol: Gestor",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Bienvenido Usuario",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = "Rol: Gestor",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.height(400.dp)) {
-                    items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
-                        ProjectItem(project)
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.height(400.dp)) {
-                    items(listOf("Proyecto A", "Proyecto B", "Proyecto C")) { project ->
-                        ProjectItem(project)
-                    }
+            LazyColumn(modifier = Modifier.height(200.dp)) {
+                items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
+                    ProjectItem(project)
                 }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = { navigator?.pop() },
-                modifier = Modifier
-                    .padding(16.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
-            ) {
-                Text("Desconectar", fontSize = 20.sp, color = Color.White)
+            if (historial.isEmpty()) {
+                Text("No hay historial disponible", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+            } else {
+                LazyColumn(modifier = Modifier.height(200.dp)) {
+                    items(historial) { proyecto ->
+                        ProjectItem(proyecto.nombre, proyecto.descripcion)
+                    }
+                }
             }
         }
     }
@@ -97,23 +104,20 @@ class WelcomeScreen : Screen {
 
 
 @Composable
-fun ProjectItem(projectName: String) {
-    val navigator = LocalNavigator.current
-
+fun ProjectItem(nombre: String, descripcion: String = "") {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(8.dp),
         elevation = 4.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(projectName, fontSize = 16.sp, fontWeight = FontWeight.Medium)
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { navigator?.push(ProyectosScreen()) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))) {
-                Text("Entrar al Proyecto",color = Color.White)
+            Text(text = nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            if (descripcion.isNotEmpty()) {
+                Text(text = descripcion, fontSize = 14.sp, color = Color.Gray)
             }
         }
     }
 }
+
 
