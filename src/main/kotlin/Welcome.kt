@@ -32,13 +32,9 @@ class WelcomeScreen(val usuario: User) : Screen {
         var activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
         val navigator = LocalNavigator.current
 
-        // Cargar datos desde la API
         LaunchedEffect(Unit) {
             getHistorialProyectos { proyectos ->
                 historial = proyectos
-            }
-            getProyectosActivos { proyectos ->
-                activos = proyectos
             }
         }
 
@@ -62,61 +58,63 @@ class WelcomeScreen(val usuario: User) : Screen {
                     color = Color.White
                 )
             }
+            Box {
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Bienvenido ${usuario.nombre}",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                Text(
-                    text = "Rol: Gestor",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { navigator?.push(ProyectosScreen()) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    Text("Entrar a Proyectos", color = Color.White)
-                }
+                    Text(
+                        text = "Bienvenido ${usuario.nombre}",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = "Rol: Gestor",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
 
-                Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                if (historial.isEmpty()) {
-                    Text("No hay historial disponible", fontSize = 16.sp, fontStyle = FontStyle.Italic)
-                } else {
-                    LazyColumn(modifier = Modifier.height(200.dp)) {
-                        items(historial) { proyecto ->
-                            ProjectItem(proyecto.nombre, proyecto.descripcion)
+
+                    Button(
+                        onClick = { navigator?.push(ProyectosScreen()) },
+                        colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                    ) {
+                        Text("Entrar a Proyectos", color = Color.White)
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    if (historial.isEmpty()) {
+                        Text("No hay historial disponible", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                    } else {
+                        LazyColumn(modifier = Modifier.height(200.dp)) {
+                            items(historial) { proyecto ->
+                                ProjectItem(proyecto.nombre, proyecto.descripcion)
+                            }
                         }
                     }
-                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                // Botón para volver atrás
-                Button(
-                    onClick = { navigator?.pop() },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
-                ) {
-                    Text("Volver", fontSize = 20.sp, color = Color.White)
+                    // Botón para volver atrás
+                    Button(
+                        onClick = { navigator?.pop() },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
+                    ) {
+                        Text("Volver", fontSize = 20.sp, color = Color.White)
+                    }
                 }
             }
         }
