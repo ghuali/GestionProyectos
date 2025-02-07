@@ -1,5 +1,6 @@
 package network
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -16,7 +17,10 @@ suspend fun getHistorialProyectos(onSuccessResponse: (List<Historial> ) -> Unit)
         try {
             val respuesta = httpClient.get(url)
             val responseBody = respuesta.bodyAsText()
-            if (respuesta.status == HttpStatusCode.OK)
+            if (respuesta.status == HttpStatusCode.OK) {
+                val proyectos = respuesta.body<List<Historial>>()
+                onSuccessResponse(proyectos)
+            }
         }
     }
 }
