@@ -96,21 +96,23 @@ class ProyectosScreen() : Screen {
                 }
             }
         }
-    }
-}
-private fun ProjectItem(nombre: String, descripcion: String = "") {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            if (descripcion.isNotEmpty()) {
-                Text(text = descripcion, fontSize = 14.sp, color = Color.Gray)
+
+
+        }
+    @Composable
+    fun ProjectItem(nombre: String, descripcion: String = "") {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            elevation = 4.dp
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                if (descripcion.isNotEmpty()) {
+                    Text(text = descripcion, fontSize = 14.sp, color = Color.Gray)
+                }
             }
         }
     }
-
 }
