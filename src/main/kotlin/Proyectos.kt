@@ -27,16 +27,16 @@ import model.User
 import network.getHistorialProyectos
 import network.getProyectosActivos
 
-class ProyectosScreen() : Screen {
+class ProyectosScreen : Screen {
     @Composable
     override fun Content() {
-        var Activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
+        var activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
         val navigator = LocalNavigator.current
 
-        LaunchedEffect(Unit) {
 
+        LaunchedEffect(Unit) {
             getProyectosActivos { proyectos ->
-                Activos = proyectos
+                activos = proyectos
             }
         }
 
@@ -68,37 +68,43 @@ class ProyectosScreen() : Screen {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
-
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { navigator?.push(ProyectoScreen()) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))) {
-                    Text("Entrar a Proyectos",color = Color.White)
-                    Spacer(modifier = Modifier.height(8.dp))
 
-                    if (Activos.isEmpty()) {
-                        Text("No hay proyectos Activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
-                    } else {
-                        LazyColumn(modifier = Modifier.height(200.dp)) {
-                            items(Activos) { proyecto ->
-                                ProjectItem(proyecto.nombre, proyecto.descripcion)
-                            }
+                Button(
+                    onClick = { navigator?.push(ProyectoScreen()) },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                ) {
+                    Text("Entrar a Proyectos", color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (activos.isEmpty()) {
+                    Text("No hay proyectos activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                } else {
+                    LazyColumn(modifier = Modifier.height(200.dp)) {
+                        items(activos) { proyecto ->
+                            ProjectItem(proyecto.nombre, proyecto.descripcion)
                         }
                     }
+                }
 
-                    Button(
-                        onClick = { navigator?.pop() },
-                        modifier = Modifier
-                            .padding(16.dp),
-                        colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
-                    ) {
-                        Text("Desconectar", fontSize = 20.sp, color = Color.White)
-                    }
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = { navigator?.pop() },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
+                ) {
+                    Text("Desconectar", fontSize = 20.sp, color = Color.White)
                 }
             }
         }
+    }
 
-
-        }
     @Composable
     fun ProjectItem(nombre: String, descripcion: String = "") {
         Card(
