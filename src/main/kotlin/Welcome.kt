@@ -29,15 +29,16 @@ class WelcomeScreen(val usuario: User) : Screen {
     @Composable
     override fun Content() {
         var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
-        var Activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
+        var activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
         val navigator = LocalNavigator.current
 
+        // Cargar datos desde la API
         LaunchedEffect(Unit) {
             getHistorialProyectos { proyectos ->
                 historial = proyectos
             }
             getProyectosActivos { proyectos ->
-                Activos = proyectos
+                activos = proyectos
             }
         }
 
@@ -69,7 +70,6 @@ class WelcomeScreen(val usuario: User) : Screen {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
-
                 Text(
                     text = "Bienvenido ${usuario.nombre}",
                     fontSize = 32.sp,
@@ -85,22 +85,16 @@ class WelcomeScreen(val usuario: User) : Screen {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { navigator?.push(ProyectosScreen()) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))) {
-                    Text("Entrar a Proyectos",color = Color.White)
-                Spacer(modifier = Modifier.height(8.dp))
 
-                if (Activos.isEmpty()) {
-                    Text("No hay proyectos Activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
-                } else {
-                    LazyColumn(modifier = Modifier.height(200.dp)) {
-                        items(Activos) { proyecto ->
-                            ProjectItem(proyecto.nombre, proyecto.descripcion)
-                        }
-                    }
+                Button(
+                    onClick = { navigator?.push(ProyectosScreen()) },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                ) {
+                    Text("Entrar a Proyectos", color = Color.White)
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+
                 Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -113,20 +107,22 @@ class WelcomeScreen(val usuario: User) : Screen {
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Botón para volver atrás
                 Button(
                     onClick = { navigator?.pop() },
-                    modifier = Modifier
-                        .padding(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))
                 ) {
-                    Text("Desconectar", fontSize = 20.sp, color = Color.White)
+                    Text("Volver", fontSize = 20.sp, color = Color.White)
                 }
             }
         }
     }
-    }
-}
 
+    @Composable
     private fun ProjectItem(nombre: String, descripcion: String = "") {
         Card(
             modifier = Modifier
@@ -141,9 +137,8 @@ class WelcomeScreen(val usuario: User) : Screen {
                 }
             }
         }
-
     }
-
+}
 
 
 
