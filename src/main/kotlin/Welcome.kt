@@ -20,101 +20,102 @@ import kotlinx.coroutines.launch
 import model.Historial
 import network.getHistorialProyectos
 
-@Composable
-fun WelcomeScreen() {
-    val scope = rememberCoroutineScope()
-    var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
+class WelcomeScreen : Screen {
+    @Composable
+    override fun Content() {
+        val scope = rememberCoroutineScope()
+        var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
 
-    // Cargar historial al iniciar la pantalla
-    LaunchedEffect(Unit) {
-        scope.launch {
-            historial = getHistorialProyectos()
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-    ) {
-        // Header
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .background(Color(0xFF1976D2)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Nombre de Empresa",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+        // Cargar historial al iniciar la pantalla
+        LaunchedEffect(Unit) {
+            scope.launch {
+                historial = getHistorialProyectos()
+            }
         }
 
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+                .fillMaxSize()
+                .background(color = Color.White)
         ) {
-            Text(
-                text = "Bienvenido Usuario",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-
-            Text(
-                text = "Rol: Gestor",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyColumn(modifier = Modifier.height(200.dp)) {
-                items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
-                    ProjectItem(project)
-                }
+            // Header
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .background(Color(0xFF1976D2)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Nombre de Empresa",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = "Bienvenido Usuario",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
 
-            if (historial.isEmpty()) {
-                Text("No hay historial disponible", fontSize = 16.sp, fontStyle = FontStyle.Italic)
-            } else {
+                Text(
+                    text = "Rol: Gestor",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+
                 LazyColumn(modifier = Modifier.height(200.dp)) {
-                    items(historial) { proyecto ->
-                        ProjectItem(proyecto.nombre, proyecto.descripcion)
+                    items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
+                        ProjectItem(project)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Historial de Proyectos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (historial.isEmpty()) {
+                    Text("No hay historial disponible", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                } else {
+                    LazyColumn(modifier = Modifier.height(200.dp)) {
+                        items(historial) { proyecto ->
+                            ProjectItem(proyecto.nombre, proyecto.descripcion)
+                        }
                     }
                 }
             }
         }
     }
-}
 
 
-
-@Composable
-fun ProjectItem(nombre: String, descripcion: String = "") {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            if (descripcion.isNotEmpty()) {
-                Text(text = descripcion, fontSize = 14.sp, color = Color.Gray)
+    @Composable
+    fun ProjectItem(nombre: String, descripcion: String = "") {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            elevation = 4.dp
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                if (descripcion.isNotEmpty()) {
+                    Text(text = descripcion, fontSize = 14.sp, color = Color.Gray)
+                }
             }
         }
     }
