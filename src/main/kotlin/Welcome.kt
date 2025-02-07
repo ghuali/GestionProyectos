@@ -17,20 +17,26 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.launch
+import model.Activos
 import model.Historial
 import model.User
 
 import network.getHistorialProyectos
+import network.getProyectosActivos
 
 class WelcomeScreen(val usuario: User) : Screen {
     @Composable
     override fun Content() {
         var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
+        var Activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
         val navigator = LocalNavigator.current
 
         LaunchedEffect(Unit) {
             getHistorialProyectos { proyectos ->
                 historial = proyectos
+            }
+            getProyectosActivos { proyectos ->
+                Activos = proyectos
             }
         }
 
@@ -81,9 +87,13 @@ class WelcomeScreen(val usuario: User) : Screen {
                 Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
 
-                LazyColumn(modifier = Modifier.height(200.dp)) {
-                    items(listOf("Proyecto 1", "Proyecto 2", "Proyecto 3")) { project ->
-                        ProjectItem(project)
+                if (Activos.isEmpty()) {
+                    Text("No hay proyectos Activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                } else {
+                    LazyColumn(modifier = Modifier.height(200.dp)) {
+                        items(Activos) { proyecto ->
+                            ProjectItem(proyecto.nombre, proyecto.descripcion)
+                        }
                     }
                 }
 
