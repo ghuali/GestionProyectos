@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.sp
 
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import model.Activos
 import model.Historial
+import model.Proyecto
 import model.User
 
 import network.getHistorialProyectos
@@ -28,7 +28,6 @@ class WelcomeScreen(val usuario: User) : Screen {
     @Composable
     override fun Content() {
         var historial by remember { mutableStateOf<List<Historial>>(emptyList()) }
-        var activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
         val navigator = LocalNavigator.current
 
         LaunchedEffect(Unit) {
