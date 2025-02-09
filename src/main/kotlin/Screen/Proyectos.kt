@@ -18,14 +18,14 @@ import androidx.compose.ui.unit.sp
 
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import model.Activos
+import model.Proyecto
 
 import network.getProyectosActivos
 
 class ProyectosScreen : Screen {
     @Composable
     override fun Content() {
-        var activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
+        var activos by remember { mutableStateOf<List<Proyecto>>(emptyList()) }
         val navigator = LocalNavigator.current
 
         // Cargar proyectos activos al iniciar
@@ -72,6 +72,7 @@ class ProyectosScreen : Screen {
                         }
                     }
                 }
+
             }
 
             Spacer(modifier = Modifier.height(24.dp))
