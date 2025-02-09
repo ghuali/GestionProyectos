@@ -1,3 +1,5 @@
+package Screen
+
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,14 +18,11 @@ import androidx.compose.ui.unit.sp
 
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
-import kotlinx.coroutines.launch
 import model.Activos
 import model.Historial
 import model.User
 
 import network.getHistorialProyectos
-import network.getProyectosActivos
 
 class WelcomeScreen(val usuario: User) : Screen {
     @Composable
