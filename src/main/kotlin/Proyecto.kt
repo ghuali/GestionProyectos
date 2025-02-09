@@ -15,8 +15,9 @@ import androidx.compose.ui.unit.sp
 
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import model.Proyecto
 
-class ProyectoScreen (proyecto) : Screen {
+class ProyectoScreen(val proyecto: Proyecto) : Screen {
     @Composable
     override fun Content() {
         var expandedTareas by remember { mutableStateOf(false) }
@@ -33,7 +34,7 @@ class ProyectoScreen (proyecto) : Screen {
                 .fillMaxSize()
                 .background(color = Color.White)
         ) {
-
+            // Header
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -42,7 +43,7 @@ class ProyectoScreen (proyecto) : Screen {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Nombre de Empresa",
+                    text = proyecto.nombre,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -57,34 +58,26 @@ class ProyectoScreen (proyecto) : Screen {
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Proyecto",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                Text(
-                    text = "Datos (campos) del proyecto",
-                    fontSize = 20.sp,
+                    text = "Descripción: ${proyecto.descripcion}",
+                    fontSize = 18.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
 
-                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                    Text("Tareas del Proyecto", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LazyColumn(modifier = Modifier.height(400.dp)) {
-                        items(tareas) { task ->
-                            TaskItem(task)
-                        }
+                Text("Fecha de creación: ${proyecto.fecha_creacion}", fontSize = 16.sp)
+                Text("Fecha de inicio: ${proyecto.fecha_inicio}", fontSize = 16.sp)
+                Text("Cliente ID: ${proyecto.cliente}", fontSize = 16.sp)
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Tareas del Proyecto", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyColumn(modifier = Modifier.height(200.dp)) {
+                    items(tareas) { task ->
+                        TaskItem(task)
                     }
                 }
 
-
-                Text(
-                    text = "Asignar tareas al proyecto",
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Asignar tareas", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Box {
                     Button(onClick = { expandedTareas = true }) {
                         Text(selectedTarea)
@@ -104,11 +97,8 @@ class ProyectoScreen (proyecto) : Screen {
                     }
                 }
 
-                Text(
-                    text = "Asignar programadores al proyecto",
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Asignar programadores", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Box {
                     Button(onClick = { expandedProgramadores = true }) {
                         Text(selectedProgramador)
@@ -129,12 +119,9 @@ class ProyectoScreen (proyecto) : Screen {
                 }
             }
 
-
-
             Button(
                 onClick = { navigator?.pop() },
-                modifier = Modifier
-                    .padding(16.dp),
+                modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(Color.Red)
             ) {
                 Text("Volver", fontSize = 20.sp, color = Color.White)
@@ -162,3 +149,4 @@ fun TaskItem(taskName: String) {
         }
     }
 }
+
