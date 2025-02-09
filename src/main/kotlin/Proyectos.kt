@@ -33,7 +33,7 @@ class ProyectosScreen : Screen {
         var activos by remember { mutableStateOf<List<Activos>>(emptyList()) }
         val navigator = LocalNavigator.current
 
-
+        // Cargar proyectos activos al iniciar
         LaunchedEffect(Unit) {
             getProyectosActivos { proyectos ->
                 activos = proyectos
@@ -44,6 +44,7 @@ class ProyectosScreen : Screen {
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color.White)
+                .padding(16.dp)
         ) {
             // Header
             Box(
@@ -61,54 +62,37 @@ class ProyectosScreen : Screen {
                 )
             }
 
-            Box {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-                    Button(
-                        onClick = { navigator?.push(ProyectoScreen()) },
-                        colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
-                    ) {
-                        Text("Entrar a Proyectos", color = Color.White)
-                    }
+            Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text("Proyectos Activos", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    if (activos.isEmpty()) {
-                        Text("No hay proyectos activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
-                    } else {
-                        LazyColumn(modifier = Modifier.height(200.dp)) {
-                            items(activos) { proyecto ->
-                                ProjectItem(proyecto.nombre, proyecto.descripcion)
-                            }
+            if (activos.isEmpty()) {
+                Text("No hay proyectos activos", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+            } else {
+                LazyColumn(modifier = Modifier.height(300.dp)) {
+                    items(activos) { proyecto ->
+                        ProjectItem(proyecto.nombre, proyecto.descripcion) {
+                            navigator?.push(ProyectoScreen(proyecto))
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Button(
-                        onClick = { navigator?.pop() },
-                        modifier = Modifier
-                            .padding(16.dp),
-                        colors = ButtonDefaults.buttonColors(Color.Red)
-                    ) {
-                        Text("Volver", fontSize = 20.sp, color = Color.White)
-                    }
                 }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = { navigator?.pop() },
+                modifier = Modifier,
+                colors = ButtonDefaults.buttonColors(Color.Red)
+            ) {
+                Text("Volver", fontSize = 20.sp, color = Color.White)
             }
         }
     }
 
     @Composable
-    fun ProjectItem(nombre: String, descripcion: String = "") {
+    fun ProjectItem(nombre: String, descripcion: String = "", onClick: () -> Unit) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -119,6 +103,13 @@ class ProyectosScreen : Screen {
                 Text(text = nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 if (descripcion.isNotEmpty()) {
                     Text(text = descripcion, fontSize = 14.sp, color = Color.Gray)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = onClick,
+                    colors = ButtonDefaults.buttonColors(Color(0xFF1976D2))
+                ) {
+                    Text("Entrar al Proyecto", color = Color.White)
                 }
             }
         }
