@@ -11,7 +11,7 @@ import model.Tarea
 import network.NetworkUtils.httpClient
 
 fun obtenerTareas(id: Int, onSuccessResponse: (List<Tarea>) -> Unit) {
-    val url = "http://127.0.0.1:5000/proyecto/tareas_proyectos?id=$id"
+    val url = "http://127.0.0.1:5000/proyecto/tareasProyectos?id=$id"
 
     CoroutineScope(Dispatchers.IO).launch {
         val response = httpClient.get(url) {
