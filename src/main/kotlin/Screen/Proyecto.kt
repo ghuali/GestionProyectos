@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,18 +19,21 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import model.Proyecto
+import model.Tarea
+import network.obtenerTareas
 
 class ProyectoScreen(val proyecto: Proyecto) : Screen {
     @Composable
     override fun Content() {
-        var expandedTareas by remember { mutableStateOf(false) }
-        var selectedTarea by remember { mutableStateOf("Seleccionar tarea") }
-        val tareas = listOf("Tarea 1", "Tarea 2", "Tarea 3")
-
-        var expandedProgramadores by remember { mutableStateOf(false) }
-        var selectedProgramador by remember { mutableStateOf("Seleccionar programador") }
-        val programadores = listOf("Programador 1", "Programador 2", "Programador 3")
+        var tareas by remember { mutableStateOf<List<Tarea>>(emptyList()) } // Estado para las tareas
         val navigator = LocalNavigator.current
+
+        // Obtener tareas del proyecto al cargar la pantalla
+        LaunchedEffect(proyecto.id) {
+            obtenerTareas(proyecto.id) { listaTareas ->
+                tareas = listaTareas
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -72,50 +76,14 @@ class ProyectoScreen(val proyecto: Proyecto) : Screen {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Tareas del Proyecto", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.height(200.dp)) {
-                    items(tareas) { task ->
-                        TaskItem(task)
-                    }
-                }
 
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Asignar tareas", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Box {
-                    Button(onClick = { expandedTareas = true }) {
-                        Text(selectedTarea)
-                    }
-                    DropdownMenu(
-                        expanded = expandedTareas,
-                        onDismissRequest = { expandedTareas = false }
-                    ) {
-                        tareas.forEach { tarea ->
-                            DropdownMenuItem(onClick = {
-                                selectedTarea = tarea
-                                expandedTareas = false
-                            }) {
-                                Text(tarea)
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Asignar programadores", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Box {
-                    Button(onClick = { expandedProgramadores = true }) {
-                        Text(selectedProgramador)
-                    }
-                    DropdownMenu(
-                        expanded = expandedProgramadores,
-                        onDismissRequest = { expandedProgramadores = false }
-                    ) {
-                        programadores.forEach { programador ->
-                            DropdownMenuItem(onClick = {
-                                selectedProgramador = programador
-                                expandedProgramadores = false
-                            }) {
-                                Text(programador)
-                            }
+                // Mostrar tareas obtenidas desde la API
+                if (tareas.isEmpty()) {
+                    Text("No hay tareas asignadas", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                } else {
+                    LazyColumn(modifier = Modifier.height(200.dp)) {
+                        items(tareas) { tarea ->
+                            TaskItem(tarea)
                         }
                     }
                 }
@@ -133,7 +101,7 @@ class ProyectoScreen(val proyecto: Proyecto) : Screen {
 }
 
 @Composable
-fun TaskItem(taskName: String) {
+fun TaskItem(tarea: Tarea) {
     val navigator = LocalNavigator.current
 
     Card(
@@ -143,7 +111,7 @@ fun TaskItem(taskName: String) {
         elevation = 4.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(taskName, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            Text(tarea.nombre, fontSize = 16.sp, fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = { navigator?.push(TareaScreen()) }) {
                 Text("Entrar a la Tarea")
@@ -151,4 +119,5 @@ fun TaskItem(taskName: String) {
         }
     }
 }
+
 
