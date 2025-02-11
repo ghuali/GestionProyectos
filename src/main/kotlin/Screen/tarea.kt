@@ -15,12 +15,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 
-class TareaScreen: Screen {
+class TareaScreen(val tarea: Tarea) : Screen {
     @Composable
     override fun Content() {
         var expandedProgramadores by remember { mutableStateOf(false) }
         var selectedProgramador by remember { mutableStateOf("Seleccionar programador") }
-        val programadores = listOf("Programador 1", "Programador 2", "Programador 3")
+        val programadores = listOf("Programador 1", "Programador 2", "Programador 3") // Esto debería venir de una API
         val navigator = LocalNavigator.current
 
         Column(
@@ -52,17 +52,25 @@ class TareaScreen: Screen {
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Tarea",
+                    text = tarea.nombre,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
 
                 Text(
-                    text = "Mostrar datos (campos) de la tarea",
+                    text = "Descripción: ${tarea.descripcion}",
                     fontSize = 20.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
+
+                Text("Estimación: ${tarea.estimacion} horas", fontSize = 18.sp)
+                Text("Fecha de Creación: ${tarea.fecha_creacion}", fontSize = 18.sp)
+                Text("Fecha de Finalización: ${tarea.fecha_finalizacion ?: "Pendiente"}", fontSize = 18.sp)
+                Text("ID del Programador Asignado: ${tarea.programador}", fontSize = 18.sp)
+                Text("ID del Proyecto: ${tarea.proyecto}", fontSize = 18.sp)
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Dropdown para asignar programador
                 Text(
@@ -90,7 +98,6 @@ class TareaScreen: Screen {
                 }
             }
 
-
             Button(
                 onClick = { navigator?.pop() },
                 modifier = Modifier
@@ -98,7 +105,6 @@ class TareaScreen: Screen {
                 colors = ButtonDefaults.buttonColors(Color.Red)
             ) {
                 Text("Volver", fontSize = 20.sp, color = Color.White)
-
             }
         }
     }
