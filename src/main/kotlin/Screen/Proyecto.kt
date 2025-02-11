@@ -183,7 +183,7 @@ fun TaskItem(tarea: Tarea) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(tarea.nombre, fontSize = 16.sp, fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { navigator?.push(TareaScreen()) }) {
+            Button(onClick = { navigator?.push(TareaScreen(Tarea)) }) {
                 Text("Entrar a la Tarea")
             }
         }
